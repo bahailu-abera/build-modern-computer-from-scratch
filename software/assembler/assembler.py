@@ -9,9 +9,9 @@ Usage:
 """
 
 import sys
-from Parser.parser import Parser
-from Code.code import Code
-from SymbolTable.symbol_table import SymbolTable
+from parser.parser import Parser
+from code.code import Code
+from symbol_table.symbol_table import SymbolTable
 
 
 FILE_EXTENSION = '.hack'
