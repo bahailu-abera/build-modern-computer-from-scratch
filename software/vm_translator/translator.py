@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 """
-vm_translator.py
+translator.py
 
 Main driver for the Nand2Tetris VM Translator.
 This program parses one or more `.vm` files and generates a single
 `.asm` file containing equivalent Hack assembly instructions.
 
 Usage:
-    $ python3 vm_translator.py <input.vm | input_directory>
+    $ python3 translator.py <input.vm | input_directory>
 """
 
 import sys
 import os
-from vm_translator.code_writer.code_writer import CodeWriter
-from vm_translator.parser.parser import Parser
+from code_writer.code_writer import CodeWriter
+from parser.parser import Parser
+from constants.command_types import (
+    POP,
+    PUSH
+)
 
 
 FILE_EXTENSION = ".asm"
@@ -41,11 +45,11 @@ class VMTranslator:
                 self.code_writer.write_compute(self.parser.arg1())
             elif cmd_type == self.parser.C_POP:
                 self.code_writer.write_push_pop(
-                    self.parser.C_POP, self.parser.arg1(), self.parser.arg2()
+                    POP, self.parser.arg1(), self.parser.arg2()
                 )
             elif cmd_type == self.parser.C_PUSH:
                 self.code_writer.write_push_pop(
-                    self.parser.C_PUSH, self.parser.arg1(), self.parser.arg2()
+                    PUSH, self.parser.arg1(), self.parser.arg2()
                 )
             else:
                raise NotImplementedError("No implementation avaible")
@@ -89,7 +93,9 @@ def main():
     # Process each VM file
     for vm_file in vm_files:
         parser = Parser(vm_file)
-        code_writer.set_file_name(vm_file)
+
+        vm_file_name = os.path.splitext(os.path.basename(vm_file))[0]
+        code_writer.set_file_name(vm_file_name)
 
         translator = VMTranslator(parser, code_writer)
         translator.generate_code()

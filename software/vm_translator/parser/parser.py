@@ -4,7 +4,7 @@ Parser module for reading current_command line by line
 and giving corresponding current_command type and current_command arguments
 """
 from .file_stream import FileStream
-from vm_translator.constants.command_types import (
+from constants.command_types import (
     ALL_COMMANDS,
     COMPUTE_COMMANDS
 )

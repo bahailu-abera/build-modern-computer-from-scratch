@@ -19,21 +19,21 @@ LOAD_SP_TO_D = "// D = *SP (load top of stack value)\n@SP\nA=M\nD=M\n"
 # Binary arithmetic
 # -----------------------------
 
-BINARY_ADD = """// add\n
+BINARY_ADD = """// add
 {DECREMENT_SP}
-// D = y\n{LOAD_SP_TO_D}
+{LOAD_SP_TO_D}  // D = y
 {DECREMENT_SP}
 {LOAD_SP_TO_A}
-M=M+D               // x + y → top of stack\n
+M=D+M              // x + y → top of stack
 {INCREMENT_SP}
 """
 
-BINARY_SUB = """// sub\n
+BINARY_SUB = """// sub
 {DECREMENT_SP}
-// D = y\n{LOAD_SP_TO_D}
+{LOAD_SP_TO_D}  // D = y
 {DECREMENT_SP}
 {LOAD_SP_TO_A}
-M=M-D               // x - y → top of stack\n
+M=M-D               // x - y → top of stack
 {INCREMENT_SP}
 """
 
@@ -41,21 +41,21 @@ M=M-D               // x - y → top of stack\n
 # Binary logical
 # -----------------------------
 
-BINARY_AND = """// and\n
+BINARY_AND = """// and
 {DECREMENT_SP}
-// D = y\n{LOAD_SP_TO_D}
+{LOAD_SP_TO_D}  // D = y
 {DECREMENT_SP}
 {LOAD_SP_TO_A}
-M=M&D               // x & y → top of stack\n
+M=D&M             // x & y → top of stack
 {INCREMENT_SP}
 """
 
-BINARY_OR = """// or\n
+BINARY_OR = """// or
 {DECREMENT_SP}
-// D = y\n{LOAD_SP_TO_D}
+{LOAD_SP_TO_D}  // D = y
 {DECREMENT_SP}
 {LOAD_SP_TO_A}
-M=M|D               // x | y → top of stack\n
+M=D|M             // x | y → top of stack
 {INCREMENT_SP}
 """
 
@@ -63,17 +63,17 @@ M=M|D               // x | y → top of stack\n
 # Unary operations
 # -----------------------------
 
-UNARY_NEG = """// neg\n
+UNARY_NEG = """// neg
 {DECREMENT_SP}
 {LOAD_SP_TO_A}
-M=-M                // -y\n
+M=-M                // -y
 {INCREMENT_SP}
 """
 
-UNARY_NOT = """// not\n
+UNARY_NOT = """// not
 {DECREMENT_SP}
 {LOAD_SP_TO_A}
-M=!M                // !y\n
+M=!M                // !y
 {INCREMENT_SP}
 """
 
@@ -83,57 +83,57 @@ M=!M                // !y\n
 
 COMPARE_EQ = """// eq
 {DECREMENT_SP}
-// D = y\n{LOAD_SP_TO_D}
-{DECREMENT_SP}
-{LOAD_SP_TO_A}
-D=M-D               // x - y\n
-@EQ_TRUE_{label}\n
-D;JEQ               // if x == y → jump\n
-{LOAD_SP_TO_A}
-M=0                 // false (0)\n
-@EQ_END_{label}\n
-0;JMP\n
-(EQ_TRUE_{label})\n
-{LOAD_SP_TO_A}
-M=-1                // true (-1)\n
-(EQ_END_{label})\n
-{INCREMENT_SP}\n
-"""
-
-COMPARE_LT = """// lt\n
-{DECREMENT_SP}
-// D = y\n{LOAD_SP_TO_D}
+{LOAD_SP_TO_D}  // D = y
 {DECREMENT_SP}
 {LOAD_SP_TO_A}
 D=M-D               // x - y
-@LT_TRUE_{label}\n
+@EQ_TRUE_{label}
+D;JEQ               // if x == y → jump
+{LOAD_SP_TO_A}
+M=0                 // false (0)
+@EQ_END_{label}
+0;JMP
+(EQ_TRUE_{label})
+{LOAD_SP_TO_A}
+M=-1                // true (-1)
+(EQ_END_{label})
+{INCREMENT_SP}
+"""
+
+COMPARE_LT = """// lt
+{DECREMENT_SP}
+{LOAD_SP_TO_D}  // D = y
+{DECREMENT_SP}
+{LOAD_SP_TO_A}
+D=M-D               // x - y
+@LT_TRUE_{label}
 D;JLT               // if x < y → jump
 {LOAD_SP_TO_A}
 M=0                 // false (0)
-@LT_END_{label}\n
-0;JMP\n
-(LT_TRUE_{label})\n
+@LT_END_{label}
+0;JMP
+(LT_TRUE_{label})
 {LOAD_SP_TO_A}
-M=-1                // true (-1)\n
-(LT_END_{label})\n
-{INCREMENT_SP}\n
+M=-1                // true (-1)
+(LT_END_{label})
+{INCREMENT_SP}
 """
 
-COMPARE_GT = """// gt\n
+COMPARE_GT = """// gt
 {DECREMENT_SP}
-// D = y\n{LOAD_SP_TO_D}
+{LOAD_SP_TO_D}  // D = y
 {DECREMENT_SP}
 {LOAD_SP_TO_A}
-D=M-D               // x - y\n
+D=M-D               // x - y
 @GT_TRUE_{label}
-D;JGT               // if x > y → jump\n
+D;JGT               // if x > y → jump
 {LOAD_SP_TO_A}
-M=0                 // false (0)\n
-@GT_END_{label}\n
-0;JMP\n
-(GT_TRUE_{label})\n
-{LOAD_SP_TO_A}\n
-M=-1                // true (-1)\n
-(GT_END_{label})\n
+M=0                 // false (0)
+@GT_END_{label}
+0;JMP
+(GT_TRUE_{label})
+{LOAD_SP_TO_A}
+M=-1                // true (-1)
+(GT_END_{label})
 {INCREMENT_SP}
 """
