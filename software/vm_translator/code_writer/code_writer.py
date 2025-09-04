@@ -86,17 +86,20 @@ class CodeWriter:
         """
         Handles unary operations (neg, not).
         """
+        # Prepare placeholders
+        helpers = {
+            "INCREMENT_SP": INCREMENT_SP,
+            "DECREMENT_SP": DECREMENT_SP,
+            "LOAD_SP_TO_A": LOAD_SP_TO_A
+        }
+        
         if command == NEG:
             asm_instruction = UNARY_NEG.format(
-                INCREMENT_SP=INCREMENT_SP,
-                DECREMENT_SP=DECREMENT_SP,
-                LOAD_SP_TO_A=LOAD_SP_TO_A,
+                **helpers
             )
         elif command == NOT:
             asm_instruction = UNARY_NOT.format(
-                INCREMENT_SP=INCREMENT_SP,
-                DECREMENT_SP=DECREMENT_SP,
-                LOAD_SP_TO_A=LOAD_SP_TO_A,
+                **helpers
             )
         else:
             raise NotImplementedError(f"Unsupported unary command: {command}")
@@ -107,33 +110,29 @@ class CodeWriter:
         """
         Handles binary arithmetic, logical, and comparison commands.
         """
+        # Prepare placeholders
+        helpers = {
+            "INCREMENT_SP": INCREMENT_SP,
+            "DECREMENT_SP": DECREMENT_SP,
+            "LOAD_SP_TO_A": LOAD_SP_TO_A,
+            "LOAD_SP_TO_D": LOAD_SP_TO_D
+        }
+
         if command == ADD:
             asm_instruction = BINARY_ADD.format(
-                INCREMENT_SP=INCREMENT_SP,
-                DECREMENT_SP=DECREMENT_SP,
-                LOAD_SP_TO_A=LOAD_SP_TO_A,
-                LOAD_SP_TO_D=LOAD_SP_TO_D,
+                **helpers
             )
         elif command == SUB:
             asm_instruction = BINARY_SUB.format(
-                INCREMENT_SP=INCREMENT_SP,
-                DECREMENT_SP=DECREMENT_SP,
-                LOAD_SP_TO_A=LOAD_SP_TO_A,
-                LOAD_SP_TO_D=LOAD_SP_TO_D,
+                **helpers
             )
         elif command == AND:
             asm_instruction = BINARY_AND.format(
-                INCREMENT_SP=INCREMENT_SP,
-                DECREMENT_SP=DECREMENT_SP,
-                LOAD_SP_TO_A=LOAD_SP_TO_A,
-                LOAD_SP_TO_D=LOAD_SP_TO_D,
+                **helpers
             )
         elif command == OR:
             asm_instruction = BINARY_OR.format(
-                INCREMENT_SP=INCREMENT_SP,
-                DECREMENT_SP=DECREMENT_SP,
-                LOAD_SP_TO_A=LOAD_SP_TO_A,
-                LOAD_SP_TO_D=LOAD_SP_TO_D,
+                **helpers
             )
         elif command in (EQ, LT, GT):
             label_id = self.__get_label()
@@ -145,11 +144,8 @@ class CodeWriter:
                 template = COMPARE_GT
 
             asm_instruction = template.format(
-                INCREMENT_SP=INCREMENT_SP,
-                DECREMENT_SP=DECREMENT_SP,
-                LOAD_SP_TO_A=LOAD_SP_TO_A,
-                LOAD_SP_TO_D=LOAD_SP_TO_D,
                 label=label_id,
+                **helpers
             )
         else:
             raise NotImplementedError(f"Unsupported binary command: {command}")
